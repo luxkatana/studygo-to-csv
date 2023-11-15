@@ -9,6 +9,14 @@ pip install -r requirements.txt
 python3 -m pip install -r requirements.txt
 ```
 
+You'll need a chromedriver.exe for selenium. To install one: 
+<ol>
+<li>Head to https://chromedriver.chromium.org/downloads</li>
+<li>and download a chromedriver based on your google chrome's version</li>
+<li>Unzip the downloaded zip from the website</li>
+<li>Move the <strong>chromedriver.exe</strong> to this project's folder</li>
+</ol>
+
 Put some url's from studygo lists on each line
 
 **Example links.txt**

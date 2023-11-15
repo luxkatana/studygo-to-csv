@@ -2,3 +2,4 @@
 /out/*
 /pyenv/
 /.idea/
+/chromedriver.exe
