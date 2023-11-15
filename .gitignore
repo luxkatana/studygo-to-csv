@@ -1,5 +1,5 @@
 /*.csv
-/out/*
+/out/*.csv
 /pyenv/
 /.idea/
 /chromedriver.exe
