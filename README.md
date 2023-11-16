@@ -12,7 +12,7 @@ python3 -m pip install -r requirements.txt
 You'll need a chromedriver.exe for selenium. To install one: 
 <ol>
 <li>Head to https://chromedriver.chromium.org/downloads</li>
-<li>and download a chromedriver based on your google chrome's version</li>
+<li>and download a chromedriver based on your google chrome's version  and your OS</li>
 <li>Unzip the downloaded zip from the website</li>
 <li>Move the <strong>chromedriver.exe</strong> to this project's folder</li>
 </ol>
@@ -31,3 +31,8 @@ python3 main.py
 # or
 python main.py
 ```
+
+## Configuration
+modify **config.toml** to change the behaviour of the program
+
+> If your OS is unix-based, you'll need to change the chromedriver path in config.toml to chromedriver

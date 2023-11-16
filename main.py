@@ -2,11 +2,18 @@ from selenium import webdriver
 from os.path import abspath
 from time import sleep
 from lxml import html
+import tomllib
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from typing import NamedTuple
+
+
+def load_config() -> dict[str, str]:
+    with open('./config.toml', 'rb')  as config_file:
+        data = tomllib.load(config_file)
+    return data
 
 
 class Flashcards(NamedTuple):
@@ -16,18 +23,13 @@ class Flashcards(NamedTuple):
     data: list[tuple[str, str]]
 
 
-def main(url: str) -> Flashcards:
-    service = Service(executable_path='./chromedriver.exe')
-    options = webdriver.ChromeOptions()
-    options.add_argument('--headless')
-    driver = webdriver.Chrome(service=service, options=options)
+def main(url: str, driver: webdriver.Chrome) -> Flashcards:
     driver.get(url)
     try:
         WebDriverWait(driver, 10).until(
             EC.presence_of_element_located((By.XPATH, '/html/body/div/main/div/div/div[1]/header/div[2]/h1')))
         sleep(1)
     except Exception as e:  # noqa
-        driver.quit()
         raise e
 
     name = driver.find_element(
@@ -60,12 +62,18 @@ def main(url: str) -> Flashcards:
 
 
 if __name__ == '__main__':
-    with open('./links.txt', 'r') as file:  # noqa
+    config = load_config()
+
+    with open(config.get('links_input_file', 'links.txt'), 'r') as file:  # noqa
         links: list[str] = file.read().splitlines()
     flashcards_all: list[Flashcards] = []
+    service = Service(executable_path=config.get('chromedriver_path', 'chromedriver.exe'))
+    options = webdriver.ChromeOptions()
+    options.add_argument('--headless=new')
+    driver = webdriver.Chrome(service=service, options=options)
     for link in links:
         try:
-            flashcards_all.append(main(link))
+            flashcards_all.append(main(link, driver))
         except Exception as e:
             print(f"Link `{link}` raised an exception during scraping: ", e, ' (this link will be skipped)')
             continue
@@ -77,3 +85,4 @@ if __name__ == '__main__':
         with open(f'out/{flashcard.name}.csv', 'w') as file:
             file.write(csv_string)
             print(f"Flashcard {flashcard.name} has been successfully written to {abspath(file.name)}")
+    driver.quit()

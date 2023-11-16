@@ -3,3 +3,4 @@
 /pyenv/
 /.idea/
 /chromedriver.exe
+/__pycache__/

@@ -1,0 +1,2 @@
+links_input_file = "links.txt" # file with links to the URL's
+chromedriver_path = "chromedriver.exe" # change this to ./chromedriver if you're on an unix-based system
