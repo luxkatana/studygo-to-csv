@@ -16,14 +16,14 @@ def load_config() -> dict[str, str]:
     return data
 
 
-class Flashcards(NamedTuple):
+class StudyGoList(NamedTuple):
     name: str
     left_language: str
     right_language: str
     data: list[tuple[str, str]]
 
 
-def main(url: str, driver: webdriver.Chrome) -> Flashcards:
+def main(url: str, driver: webdriver.Chrome) -> StudyGoList:
     driver.get(url)
     try:
         WebDriverWait(driver, 10).until(
@@ -58,7 +58,7 @@ def main(url: str, driver: webdriver.Chrome) -> Flashcards:
             .text
         pairs_result.append((word_left, word_right))
 
-    return Flashcards(left_language=first_row_language, right_language=second_row_language, data=pairs_result, name=name)
+    return StudyGoList(left_language=first_row_language, right_language=second_row_language, data=pairs_result, name=name)
 
 
 if __name__ == '__main__':
@@ -66,10 +66,12 @@ if __name__ == '__main__':
 
     with open(config.get('links_input_file', 'links.txt'), 'r') as file:  # noqa
         links: list[str] = file.read().splitlines()
-    flashcards_all: list[Flashcards] = []
+    flashcards_all: list[StudyGoList] = []
     service = Service(executable_path=config.get('chromedriver_path', 'chromedriver.exe'))
     options = webdriver.ChromeOptions()
     options.add_argument('--headless=new')
+    if (config_binary_location := config.get('chrome_path', 'AUTOFIND')) != 'AUTOFIND':
+        options.binary_location = config_binary_location
     driver = webdriver.Chrome(service=service, options=options)
     for link in links:
         try:
@@ -77,7 +79,7 @@ if __name__ == '__main__':
         except Exception as e:
             print(f"Link `{link}` raised an exception during scraping: ", e, ' (this link will be skipped)')
             continue
-    flashcard: Flashcards
+    flashcard: StudyGoList
     for flashcard in flashcards_all:
         csv_string: str = f'{flashcard.left_language},{flashcard.right_language}\n'
         for left_row, right_row in flashcard.data:

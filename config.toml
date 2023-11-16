@@ -1,2 +1,4 @@
 links_input_file = "links.txt" # file with links to the URL's
 chromedriver_path = "chromedriver.exe" # change this to ./chromedriver if you're on an unix-based system
+chrome_path = "AUTOFIND" # change this to the path of your chrome browser executable
+# changing chrome_path to AUTOFIND will automatically find the path of your chrome browser executable

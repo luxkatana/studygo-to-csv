@@ -35,4 +35,6 @@ python main.py
 ## Configuration
 modify **config.toml** to change the behaviour of the program
 
-> If your OS is unix-based, you'll need to change the chromedriver path in config.toml to chromedriver
+> If your OS is unix-based, you'll need to change the chromedriver path in config.toml to ./chromedriver
+
+> It is recommended to manually specify chrome_path on unix-based operating systems
